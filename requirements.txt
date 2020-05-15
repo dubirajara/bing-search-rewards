@@ -1,0 +1,4 @@
+click==7.1.2
+python-decouple==3.3
+requests==2.23.0
+selenium==3.141.0

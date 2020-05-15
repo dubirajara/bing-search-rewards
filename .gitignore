@@ -1,0 +1,14 @@
+*.pyc
+*.sqlite3
+.bash_profile
+.bash_profile.swp
+.coverage
+.DS_Store
+.env
+.idea
+.venv
+__pycache__
+_pgbackup
+media
+staticsfiles
+*.log
