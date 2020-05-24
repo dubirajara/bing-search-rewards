@@ -17,7 +17,7 @@ def get_driver_firefox(mobile=False):
     if mobile:
         profile.set_preference("general.useragent.override",
                                "Mozilla/5.0 (Android 8.0.0; Mobile; rv:63.0) Gecko/63.0 Firefox/63.0")
-    driver = webdriver.Firefox(firefox_profile=profile, executable_path='firefox-driver/geckodriver')
+    driver = webdriver.Firefox(firefox_profile=profile, executable_path='geckodriver/geckodriver')
     return driver
 
 

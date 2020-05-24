@@ -28,7 +28,7 @@ VERSION_DISPATCHER = {
 @click.option('--password', prompt=True, default='', hide_input=True)
 @click.option('--version', prompt=MSG_CHOICES, type=click.Choice(VERSION_DISPATCHER.keys()), show_choices=False)
 def create_config_env(email, password, version):
-    save_firefox_drive(VERSION_DISPATCHER[str(version)])
+    save_geckodriver(VERSION_DISPATCHER[str(version)])
     print('Created firefox geckodriver.')
     config_env = f"""EMAIL={email}
 PASS={password}
@@ -43,11 +43,11 @@ BING_SEARCH_URL=http://www.bing.com/search?q=
         print('Created the .env file successfully.')
 
 
-def save_firefox_drive(version):
+def save_geckodriver(version):
     zip_url = f'https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-{version}'
     zip_file = zip_url.split('/')[-1]
     urlretrieve(zip_url, zip_file)
-    shutil.unpack_archive(zip_file, os.path.basename('firefox-driver'))
+    shutil.unpack_archive(zip_file, os.path.basename('geckodriver'))
     os.remove(zip_file)
 
 
