@@ -1,8 +1,8 @@
 import os
 import shutil
-from urllib.request import urlretrieve
 
 import click
+import requests
 
 
 MSG_CHOICES = '''
@@ -44,11 +44,13 @@ BING_SEARCH_URL=http://www.bing.com/search?q=
 
 
 def save_geckodriver(version):
-    zip_url = f'https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-{version}'
-    zip_file = zip_url.split('/')[-1]
-    urlretrieve(zip_url, zip_file)
-    shutil.unpack_archive(zip_file, os.path.basename('geckodriver'))
-    os.remove(zip_file)
+    url = f'https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-{version}'
+    file = url.split('/')[-1]
+    response = requests.get(url)
+    with open(file, 'wb') as f:
+        f.write(response.content)
+    shutil.unpack_archive(file, os.path.basename('geckodriver'))
+    os.remove(file)
 
 
 if __name__ == '__main__':
