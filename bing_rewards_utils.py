@@ -1,11 +1,15 @@
 import json
 import random
 import time
+from os import listdir
 
 import requests
-from decouple import config
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+
+
+RANDOM_WORDS_URL = 'https://www.randomlists.com/data/words.json'
+BING_LOGIN_URL = 'https://login.live.com/'
 
 
 def wait_for(sec=2):
@@ -17,12 +21,15 @@ def get_driver_firefox(mobile=False):
     if mobile:
         profile.set_preference("general.useragent.override",
                                "Mozilla/5.0 (Android 8.0.0; Mobile; rv:63.0) Gecko/63.0 Firefox/63.0")
-    driver = webdriver.Firefox(firefox_profile=profile, executable_path='geckodriver/geckodriver')
-    return driver
+    try:
+        driver = webdriver.Firefox(firefox_profile=profile, executable_path=f"geckodriver/{listdir('geckodriver')[0]}")
+        return driver
+    except FileNotFoundError:
+        raise SystemExit('You must save geckodriver before with the command: python contrib/config_utils.py')
 
 
 def get_word_list(search_count):
-    response = requests.get(config('RANDOM_WORDS_URL'))
+    response = requests.get(RANDOM_WORDS_URL)
     words_list = random.sample(json.loads(response.text)['data'], search_count)
     print(f'{len(words_list)} words selected')
     return words_list
@@ -30,7 +37,7 @@ def get_word_list(search_count):
 
 def login(driver, email, password):
     try:
-        driver.get(config('BING_LOGIN_URL'))
+        driver.get(BING_LOGIN_URL)
         wait_for(5)
         mail_element = driver.find_element_by_name('loginfmt')
         mail_element.clear()

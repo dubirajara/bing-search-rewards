@@ -24,23 +24,19 @@ VERSION_DISPATCHER = {
 
 
 @click.command()
+@click.option('--version', prompt=MSG_CHOICES, type=click.Choice(VERSION_DISPATCHER.keys()), show_choices=False)
 @click.option('--email', prompt=True, default='')
 @click.option('--password', prompt=True, default='', hide_input=True)
-@click.option('--version', prompt=MSG_CHOICES, type=click.Choice(VERSION_DISPATCHER.keys()), show_choices=False)
-def create_config_env(email, password, version):
+def create_config_env(version, email, password):
     save_geckodriver(VERSION_DISPATCHER[str(version)])
-    print('Created firefox geckodriver.')
     config_env = f"""EMAIL={email}
 PASS={password}
-RANDOM_WORDS_URL=https://www.randomlists.com/data/words.json
-BING_LOGIN_URL=https://login.live.com/
-BING_SEARCH_URL=http://www.bing.com/search?q=
 """
 
     # Writing our configuration file to '.env'
     with open('.env', 'w') as configfile:
         configfile.write(config_env)
-        print('Created the .env file successfully.')
+        print('Created the .env file successfully!')
 
 
 def save_geckodriver(version):
@@ -50,6 +46,7 @@ def save_geckodriver(version):
     with open(file, 'wb') as f:
         f.write(response.content)
     shutil.unpack_archive(file, os.path.basename('geckodriver'))
+    print('Created firefox geckodriver!')
     os.remove(file)
 
 
