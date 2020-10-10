@@ -7,10 +7,16 @@ from bing_rewards_utils import (get_driver_firefox, get_word_list, login,
 BING_SEARCH_URL = 'http://www.bing.com/search?q='
 
 
+def callback(ctx, param, value):
+    if not value:
+        return config('PASS', '')
+    return value
+
+
 @click.command()
 @click.option('--mobile', default=False, help='rewards firefox mobile')
-@click.option('--email', default=config('EMAIL', ''), help='microsoft email account')
-@click.option('--password', default=config('PASS', ''), help='microsoft pass account')
+@click.option('--email', prompt=True, default=lambda: config('EMAIL', ''), help='microsoft email account')
+@click.option('--password', prompt=True, callback=callback, default='', help='microsoft pass account', hide_input=True)
 def get_search_rewards(mobile, email, password):
     search_count = 25 if mobile else 35
 

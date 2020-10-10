@@ -52,7 +52,7 @@ def login(driver, email, password):
         password_element.send_keys(Keys.ENTER)
 
     except Exception as e:
-        driver.close()
         print(e)
+        password_element.send_keys(Keys.ENTER)
 
     wait_for(5)
