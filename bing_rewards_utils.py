@@ -7,6 +7,7 @@ import requests
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
+from contrib.config_utils import save_geckodriver
 
 RANDOM_WORDS_URL = 'https://www.randomlists.com/data/words.json'
 BING_LOGIN_URL = 'https://login.live.com/'
@@ -25,7 +26,8 @@ def get_driver_firefox(mobile=False):
         driver = webdriver.Firefox(firefox_profile=profile, executable_path=f"geckodriver/{listdir('geckodriver')[0]}")
         return driver
     except FileNotFoundError:
-        raise SystemExit('You must save geckodriver before with the command: python contrib/config_utils.py')
+        save_geckodriver()
+        return get_driver_firefox(mobile)
 
 
 def get_word_list(search_count):
@@ -47,12 +49,13 @@ def login(driver, email, password):
         password_element = driver.find_element_by_name('passwd')
         password_element.clear()
         password_element.send_keys(password)
-        checkbox_element = driver.find_element_by_name("KMSI")
-        checkbox_element.click()
         password_element.send_keys(Keys.ENTER)
+        wait_for(5)
+        checkbox_element = driver.find_element_by_name('DontShowAgain')
+        checkbox_element.click()
+        checkbox_element.submit()
 
     except Exception as e:
-        print(e)
-        password_element.send_keys(Keys.ENTER)
+        raise SystemExit(e)
 
     wait_for(5)

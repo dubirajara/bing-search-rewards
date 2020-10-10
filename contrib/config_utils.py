@@ -1,34 +1,24 @@
 import os
 import shutil
+import platform
 
 import click
 import requests
 
 
-MSG_CHOICES = '''
-Enter a firefox geckodriver to your system:\n
-Linux32 [1]
-Linux64 [2]
-MacOs   [3]
-Win32   [4]
-Win64   [5]
-'''''
-
 VERSION_DISPATCHER = {
-    '1': 'linux32.tar.gz',
-    '2': 'linux64.tar.gz',
-    '3': 'macos.tar.gz',
-    '4': 'win32.zip',
-    '5': 'win64.zip'
+    'linux32bit': 'linux32.tar.gz',
+    'linux64bit': 'linux64.tar.gz',
+    'darwin': 'macos.tar.gz',
+    'windows32bit': 'win32.zip',
+    'windows64bit': 'win64.zip'
 }
 
 
 @click.command()
-@click.option('--version', prompt=MSG_CHOICES, type=click.Choice(VERSION_DISPATCHER.keys()), show_choices=False)
 @click.option('--email', prompt=True, default='')
 @click.option('--password', prompt=True, default='', hide_input=True)
-def create_config_env(version, email, password):
-    save_geckodriver(VERSION_DISPATCHER[str(version)])
+def create_config_env(email, password):
     config_env = f"""EMAIL={email}
 PASS={password}
 """
@@ -39,7 +29,11 @@ PASS={password}
         print('Created the .env file successfully!')
 
 
-def save_geckodriver(version):
+def save_geckodriver():
+    plataform_system = platform.system().lower()
+    platform_version = plataform_system if plataform_system == 'darwin' else plataform_system + platform.architecture()[
+        0]
+    version = VERSION_DISPATCHER[platform_version]
     url = f'https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-{version}'
     file = url.split('/')[-1]
     response = requests.get(url)
