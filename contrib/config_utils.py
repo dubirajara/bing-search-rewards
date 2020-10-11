@@ -55,4 +55,4 @@ def save_geckodriver():
 
 
 if __name__ == '__main__':
-    check_geckodriver_last_release()
+    create_config_env()
