@@ -7,7 +7,7 @@ import requests
 from selenium import common, webdriver
 from selenium.webdriver.common.keys import Keys
 
-from contrib.config_utils import save_geckodriver
+from geckodriver import save_geckodriver
 
 RANDOM_WORDS_URL = 'https://www.randomlists.com/data/words.json'
 BING_LOGIN_URL = 'https://login.live.com/'
