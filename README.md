@@ -17,15 +17,15 @@ pip install -r requirements.txt
 ```sh
 python get_rewards.py
 ```
-or you can pass the flags **--email** and **--password**
+- Or you can pass the flags **--email** and **--password**
 ```sh
 python get_rewards.py --email YOUR-EMAIL@outlook.com --password YOURPASS
 ```
-optional you can pass flag **--mobile** to win more points, emulating a mobile browser.
+- Optional you can pass flag **--mobile** to win more points, emulating a mobile browser.
 ```sh
 python get_rewards.py --mobile True --email YOUR-EMAIL@outlook.com --password YOURPASS
 ```
-If you don't want to always pass the email and password parameters, you can run the **config_utils.py** script, which will save your credentials as environment variables:
+- If you don't want to always pass the email and password parameters, you can run the **config_utils.py** script, which will save your credentials as environment variables:
 ```sh
 python contrib/config_utils.py
 ```
