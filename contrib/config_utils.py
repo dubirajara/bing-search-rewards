@@ -34,7 +34,7 @@ def save_geckodriver():
     platform_version = plataform_system if plataform_system == 'darwin' else plataform_system + platform.architecture()[
         0]
     version = VERSION_DISPATCHER[platform_version]
-    url = f'https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-{version}'
+    url = f'https://github.com/mozilla/geckodriver/releases/download/v0.27.0/geckodriver-v0.27.0-{version}'
     file = url.split('/')[-1]
     response = requests.get(url)
     with open(file, 'wb') as f:
