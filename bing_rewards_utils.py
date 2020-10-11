@@ -4,7 +4,7 @@ import time
 from os import listdir
 
 import requests
-from selenium import webdriver
+from selenium import common, webdriver
 from selenium.webdriver.common.keys import Keys
 
 from contrib.config_utils import save_geckodriver
@@ -51,9 +51,12 @@ def login(driver, email, password):
         password_element.send_keys(password)
         password_element.send_keys(Keys.ENTER)
         wait_for(5)
-        checkbox_element = driver.find_element_by_name('DontShowAgain')
-        checkbox_element.click()
-        checkbox_element.submit()
+        try:
+            checkbox_element = driver.find_element_by_name('DontShowAgain')
+            checkbox_element.click()
+            checkbox_element.submit()
+        except common.exceptions.NoSuchElementException:
+            pass
 
     except Exception as e:
         driver.close()

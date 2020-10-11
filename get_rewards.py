@@ -15,8 +15,8 @@ def callback(ctx, param, value):
 
 @click.command()
 @click.option('--mobile', default=False, help='rewards firefox mobile')
-@click.option('--email', prompt=True, default=lambda: config('EMAIL', ''), help='microsoft email account')
-@click.option('--password', prompt=True, callback=callback, default='', help='microsoft pass account', hide_input=True)
+@click.option('--email', prompt=True if not config('EMAIL', '') else False, default=lambda: config('EMAIL', ''), help='microsoft email account')
+@click.option('--password', prompt=True if not config('PASS', '') else False, callback=callback, default='', help='microsoft pass account', hide_input=True)
 def get_search_rewards(mobile, email, password):
     search_count = 25 if mobile else 35
 
