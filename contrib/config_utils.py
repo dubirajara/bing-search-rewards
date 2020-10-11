@@ -29,12 +29,22 @@ PASS={password}
         print('Created the .env file successfully!')
 
 
+def check_geckodriver_last_release():
+    url = 'https://api.github.com/repos/mozilla/geckodriver/releases'
+    try:
+        tag_version = requests.get(url).json()[0]['tag_name']
+    except Exception:
+        tag_version = 'v0.27.0'
+    return tag_version
+
+
 def save_geckodriver():
     plataform_system = platform.system().lower()
     platform_version = plataform_system if plataform_system == 'darwin' else plataform_system + platform.architecture()[
         0]
     version = VERSION_DISPATCHER[platform_version]
-    url = f'https://github.com/mozilla/geckodriver/releases/download/v0.27.0/geckodriver-v0.27.0-{version}'
+    tag_version = check_geckodriver_last_release()
+    url = f'https://github.com/mozilla/geckodriver/releases/download/{tag_version}/geckodriver-{tag_version}-{version}'
     file = url.split('/')[-1]
     response = requests.get(url)
     with open(file, 'wb') as f:
@@ -45,4 +55,4 @@ def save_geckodriver():
 
 
 if __name__ == '__main__':
-    create_config_env()
+    check_geckodriver_last_release()
