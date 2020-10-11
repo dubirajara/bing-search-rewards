@@ -56,6 +56,7 @@ def login(driver, email, password):
         checkbox_element.submit()
 
     except Exception as e:
+        driver.close()
         raise SystemExit(e)
 
     wait_for(5)
