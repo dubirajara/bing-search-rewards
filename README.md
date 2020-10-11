@@ -1,6 +1,8 @@
 # bing-search-rewards
 Python script to win points in bing search rewards.
 
+Inspired in Medium blog post: https://medium.com/@prateekrm/earn-500-daily-microsoft-rewards-points-automatically-with-a-simple-python-program-38fe648ff2a9
+
 ## How to use?
 
 - Clone the repository:
