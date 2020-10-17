@@ -6,6 +6,7 @@ from os import listdir
 import requests
 from selenium import common, webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.firefox.options import Options
 
 from geckodriver import save_geckodriver
 
@@ -19,11 +20,14 @@ def wait_for(sec=2):
 
 def get_driver_firefox(mobile=False):
     profile = webdriver.FirefoxProfile()
+    options = Options()
+    options.headless = True
     if mobile:
         profile.set_preference("general.useragent.override",
                                "Mozilla/5.0 (Android 8.0.0; Mobile; rv:63.0) Gecko/63.0 Firefox/63.0")
     try:
-        driver = webdriver.Firefox(firefox_profile=profile, executable_path=f"geckodriver/{listdir('geckodriver')[0]}")
+        driver = webdriver.Firefox(firefox_profile=profile, options=options,
+                                   executable_path=f"geckodriver/{listdir('geckodriver')[0]}")
         return driver
     except FileNotFoundError:
         save_geckodriver()
