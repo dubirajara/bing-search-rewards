@@ -5,13 +5,19 @@ from os import listdir
 
 import requests
 from selenium import common, webdriver
+from selenium.common import WebDriverException
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.edge.service import Service as EdgeService
+from selenium.webdriver.edge.options import Options as EdgeOptions
 
-from geckodriver import save_geckodriver
+from get_webdriver import save_webdriver
 
 RANDOM_WORDS_URL = 'https://www.randomlists.com/data/words.json'
 BING_LOGIN_URL = 'https://login.live.com/'
+MSEDGEDRIVER = 'msedgedriver'
+GECKODRIVER = 'geckodriver'
 
 
 def wait_for(sec=2):
@@ -20,18 +26,37 @@ def wait_for(sec=2):
 
 def get_driver_firefox(mobile=False):
     profile = webdriver.FirefoxProfile()
-    options = Options()
+    options = FirefoxOptions()
     options.headless = True
+    options.add_argument("--disable-notifications")
     if mobile:
         profile.set_preference("general.useragent.override",
                                "Mozilla/5.0 (Android 8.0.0; Mobile; rv:63.0) Gecko/63.0 Firefox/63.0")
     try:
         driver = webdriver.Firefox(firefox_profile=profile, options=options,
-                                   executable_path=f"geckodriver/{listdir('geckodriver')[0]}")
+                                   service=FirefoxService(f"{GECKODRIVER}/{listdir(GECKODRIVER)[0]}"))
         return driver
     except FileNotFoundError:
-        save_geckodriver()
+        save_webdriver(GECKODRIVER)
         return get_driver_firefox(mobile)
+
+
+def get_driver_edge(mobile=False, service=False):
+    options = EdgeOptions()
+    options.add_experimental_option("excludeSwitches", ["ignore-certificate-errors"])
+    options.add_argument("--disable-notifications")
+    options.add_argument('--disable-gpu')
+    options.add_argument('--headless')
+    if mobile:
+        mobile_emulation = {"deviceName": "iPhone 6"}
+        options.add_experimental_option("mobileEmulation", mobile_emulation)
+    try:
+        driver = webdriver.Edge(options=options,
+                                service=EdgeService(f"{MSEDGEDRIVER}/{listdir(MSEDGEDRIVER)[0]}") if service else None)
+        return driver
+    except (FileNotFoundError, WebDriverException):
+        save_webdriver(MSEDGEDRIVER)
+        return get_driver_edge(service=True)
 
 
 def get_word_list(search_count):
@@ -43,24 +68,26 @@ def get_word_list(search_count):
 
 def login(driver, email, password):
     try:
+        print('Logging with microsoft credentials\n')
         driver.get(BING_LOGIN_URL)
         wait_for(5)
-        mail_element = driver.find_element_by_name('loginfmt')
+        mail_element = driver.find_element('name', 'loginfmt')
         mail_element.clear()
         mail_element.send_keys(email)
         mail_element.send_keys(Keys.RETURN)
         wait_for(5)
-        password_element = driver.find_element_by_name('passwd')
+        password_element = driver.find_element('name', 'passwd')
         password_element.clear()
         password_element.send_keys(password)
         password_element.send_keys(Keys.ENTER)
-        wait_for(5)
-        try:
-            checkbox_element = driver.find_element_by_name('DontShowAgain')
-            checkbox_element.click()
-            checkbox_element.submit()
-        except common.exceptions.NoSuchElementException:
-            pass
+        if driver.name == 'firefox':
+            try:
+                wait_for(5)
+                checkbox_element = driver.find_element('name', 'DontShowAgain')
+                checkbox_element.click()
+                checkbox_element.submit()
+            except common.exceptions.NoSuchElementException:
+                pass
 
     except Exception as e:
         driver.close()

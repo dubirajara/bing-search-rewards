@@ -5,6 +5,8 @@ Inspired by Medium blog post: https://medium.com/@prateekrm/earn-500-daily-micro
 
 ## How to use?
 
+**IMPORTANT**: Requires Python 3.10 or newer. It supports firefox and edge webdrivers, but I advise to use edge webdriver, it gives better results and earns more rewards points.
+
 - Clone the repository:
 ```sh
 git clone https://github.com/dubirajara/bing-search-rewards.git && cd bing-search-rewards
@@ -15,13 +17,13 @@ git clone https://github.com/dubirajara/bing-search-rewards.git && cd bing-searc
 pip install -r requirements.txt
 ```
 
-- And run **get_rewards.py**, you can run directly without parameters, in terminal will request you to input your microsoft email and password:
+- And run **get_rewards.py**, you can run directly without parameters, in terminal will your microsoft email and password:
 ```sh
 python get_rewards.py
 ```
-- Or you can pass the flags **--email** and **--password**
+- Or you can pass the flags **--browser** **--email** and **--password**
 ```sh
-python get_rewards.py --email YOUR-EMAIL@outlook.com --password YOURPASS
+python get_rewards.py --browser edge --email YOUR-EMAIL@outlook.com --password YOURPASS
 ```
 - Optional you can pass flag **--mobile** to win more points, emulating a mobile browser.
 ```sh
