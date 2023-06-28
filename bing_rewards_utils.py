@@ -54,7 +54,7 @@ def get_driver_edge(mobile=False, service=False):
 
 
 def get_word_list(search_count):
-    response = httpx.get(RANDOM_WORDS_URL)
+    response = httpx.get(RANDOM_WORDS_URL, follow_redirects=True)
     words_list = random.sample(json.loads(response.text)['data'], search_count)
     print(f'{len(words_list)} words selected')
     return words_list

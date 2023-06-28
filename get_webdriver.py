@@ -9,7 +9,7 @@ from constants import EDGE_VERSION, FIREFOX_VERSION, GECKODRIVER, GECKODRIVER_UR
 
 def check_geckodriver_last_release():
     try:
-        tag_version = httpx.get(GECKODRIVER_URL).json()[0]['tag_name']
+        tag_version = httpx.get(GECKODRIVER_URL, follow_redirects=True).json()[0]['tag_name']
     except Exception:
         tag_version = 'v0.27.0'
     return tag_version
@@ -29,7 +29,7 @@ def save_webdriver(webdriver):
 
     url = download_url[webdriver]
     file = url.split('/')[-1]
-    response = httpx.get(url)
+    response = httpx.get(url, follow_redirects=True)
     with open(file, 'wb') as f:
         f.write(response.content)
     shutil.unpack_archive(file, os.path.basename(webdriver))
