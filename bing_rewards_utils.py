@@ -12,12 +12,8 @@ from selenium.webdriver.firefox.service import Service as FirefoxService
 from selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.edge.options import Options as EdgeOptions
 
+from constants import MSEDGEDRIVER, RANDOM_WORDS_URL, GECKODRIVER, BING_LOGIN_URL
 from get_webdriver import save_webdriver
-
-RANDOM_WORDS_URL = 'https://www.randomlists.com/data/words.json'
-BING_LOGIN_URL = 'https://login.live.com/'
-MSEDGEDRIVER = 'msedgedriver'
-GECKODRIVER = 'geckodriver'
 
 
 def wait_for(sec=2):
@@ -33,12 +29,11 @@ def get_driver_firefox(mobile=False):
         profile.set_preference("general.useragent.override",
                                "Mozilla/5.0 (Android 8.0.0; Mobile; rv:63.0) Gecko/63.0 Firefox/63.0")
     try:
-        driver = webdriver.Firefox(firefox_profile=profile, options=options,
-                                   service=FirefoxService(f"{GECKODRIVER}/{listdir(GECKODRIVER)[0]}"))
-        return driver
+        return webdriver.Firefox(firefox_profile=profile, options=options,
+                                 service=FirefoxService(f"{GECKODRIVER}/{listdir(GECKODRIVER)[0]}"))
     except FileNotFoundError:
         save_webdriver(GECKODRIVER)
-        return get_driver_firefox(mobile)
+        return get_driver_firefox(mobile=mobile)
 
 
 def get_driver_edge(mobile=False, service=False):
@@ -46,17 +41,16 @@ def get_driver_edge(mobile=False, service=False):
     options.add_experimental_option("excludeSwitches", ["ignore-certificate-errors"])
     options.add_argument("--disable-notifications")
     options.add_argument('--disable-gpu')
-    options.add_argument('--headless')
     if mobile:
-        mobile_emulation = {"deviceName": "iPhone 6"}
+        mobile_emulation = {"deviceName": "Galaxy S5"}
         options.add_experimental_option("mobileEmulation", mobile_emulation)
+        options.add_argument('--headless')
     try:
-        driver = webdriver.Edge(options=options,
-                                service=EdgeService(f"{MSEDGEDRIVER}/{listdir(MSEDGEDRIVER)[0]}") if service else None)
-        return driver
+        return webdriver.Edge(options=options,
+                              service=EdgeService(f"{MSEDGEDRIVER}/{listdir(MSEDGEDRIVER)[0]}") if service else None)
     except (FileNotFoundError, WebDriverException):
         save_webdriver(MSEDGEDRIVER)
-        return get_driver_edge(service=True)
+        return get_driver_edge(mobile=mobile, service=True)
 
 
 def get_word_list(search_count):
