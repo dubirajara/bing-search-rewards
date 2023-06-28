@@ -3,7 +3,7 @@ import random
 import time
 from os import listdir
 
-import requests
+import httpx
 from selenium import common, webdriver
 from selenium.common import WebDriverException
 from selenium.webdriver.common.keys import Keys
@@ -54,7 +54,7 @@ def get_driver_edge(mobile=False, service=False):
 
 
 def get_word_list(search_count):
-    response = requests.get(RANDOM_WORDS_URL)
+    response = httpx.get(RANDOM_WORDS_URL)
     words_list = random.sample(json.loads(response.text)['data'], search_count)
     print(f'{len(words_list)} words selected')
     return words_list

@@ -2,14 +2,14 @@ import os
 import shutil
 import platform
 
-import requests
+import httpx
 
 from constants import EDGE_VERSION, FIREFOX_VERSION, GECKODRIVER, GECKODRIVER_URL, MSEDGEDRIVER_VERSION
 
 
 def check_geckodriver_last_release():
     try:
-        tag_version = requests.get(GECKODRIVER_URL).json()[0]['tag_name']
+        tag_version = httpx.get(GECKODRIVER_URL).json()[0]['tag_name']
     except Exception:
         tag_version = 'v0.27.0'
     return tag_version
@@ -29,7 +29,7 @@ def save_webdriver(webdriver):
 
     url = download_url[webdriver]
     file = url.split('/')[-1]
-    response = requests.get(url)
+    response = httpx.get(url)
     with open(file, 'wb') as f:
         f.write(response.content)
     shutil.unpack_archive(file, os.path.basename(webdriver))
