@@ -3,7 +3,7 @@ Python script to win points in bing search rewards.
 
 Inspired by Medium blog post: https://medium.com/@prateekrm/earn-500-daily-microsoft-rewards-points-automatically-with-a-simple-python-program-38fe648ff2a9
 
-## How to use?
+### How to use?
 
 **IMPORTANT**: Requires Python 3.10 or newer. It supports firefox and edge webdrivers, but I advise to use edge webdriver, it gives better results and earns more rewards points.
 
