@@ -12,7 +12,7 @@ from selenium.webdriver.firefox.service import Service as FirefoxService
 from selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.edge.options import Options as EdgeOptions
 
-from constants import MSEDGEDRIVER, RANDOM_WORDS_URL, GECKODRIVER, BING_LOGIN_URL
+from constants import BING_LOGIN_URL, GECKODRIVER, MSEDGEDRIVER, RANDOM_WORDS_URL
 from get_webdriver import save_webdriver
 
 
@@ -23,11 +23,12 @@ def wait_for(sec=2):
 def get_driver_firefox(mobile=False):
     profile = webdriver.FirefoxProfile()
     options = FirefoxOptions()
-    options.headless = True
+    options.headless = False
     options.add_argument("--disable-notifications")
     if mobile:
         profile.set_preference("general.useragent.override",
-                               "Mozilla/5.0 (Android 8.0.0; Mobile; rv:63.0) Gecko/63.0 Firefox/63.0")
+                                "Mozilla/5.0 (Android 8.0.0; Mobile; rv:63.0) Gecko/63.0 Firefox/63.0")
+
     try:
         return webdriver.Firefox(firefox_profile=profile, options=options,
                                  service=FirefoxService(f"{GECKODRIVER}/{listdir(GECKODRIVER)[0]}"))
@@ -42,7 +43,7 @@ def get_driver_edge(mobile=False, service=False):
     options.add_argument("--disable-notifications")
     options.add_argument('--disable-gpu')
     if mobile:
-        mobile_emulation = {"deviceName": "Galaxy S5"}
+        mobile_emulation = {"deviceName": "iPhone X"}
         options.add_experimental_option("mobileEmulation", mobile_emulation)
         options.add_argument('--headless')
     try:
